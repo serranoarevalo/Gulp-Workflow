@@ -8,6 +8,7 @@ var gulp = require('gulp'),
 	plumber = require('gulp-plumber'),
 	autoprefixer = require('gulp-autoprefixer'),
 	del = 	require('del'),
+	jade = require('gulp-jade'),
 	browserSync = require('browser-sync'),
 	reload = browserSync.reload,
 	rename = require('gulp-rename');
@@ -37,6 +38,16 @@ gulp.task('sass', function() {
 		.pipe(gulp.dest('app/css/'))
 		.pipe(reload({stream:true}));
 });
+
+// ///////////////////////
+// Jade Tasks
+// ///////////////////////
+
+gulp.task('templates', function() {
+	gulp.src('app/templates/*.jade')
+		.pipe(jade())
+		.pipe(gulp.dest('app'))
+})
 
 // ///////////////////////
 // Html Tasks
@@ -75,6 +86,7 @@ gulp.task('build:serve', function() {
 gulp.task('watch', function() {
 	gulp.watch('app/js/**/*.js', ['scripts']);
 	gulp.watch('app/scss/**/*.scss', ['sass']);
+	gulp.watch('app/templates/*.jade', ['templates']);
 	gulp.watch('app/**/*.html', ['html']);
 });
 
@@ -102,7 +114,8 @@ gulp.task('build:copy', ['build:cleanfolder'], function() {
 gulp.task('build:remove', ['build:copy'],  function(cb) {
 	del([
 		'build/scss/',
-		'build/js/!(*.min.js)'
+		'build/js/!(*.min.js)',
+		'build/templates/'
 	], cb);
 });
 
@@ -112,4 +125,4 @@ gulp.task('build', ['build:copy', 'build:remove']);
 // Default Task
 // ///////////////////////
 
-gulp.task('default', ['scripts', 'watch', 'sass', 'html', 'browser-sync']);
+gulp.task('default', ['scripts', 'watch', 'sass', 'html', 'browser-sync','templates']);
