@@ -9,6 +9,7 @@ var gulp = require('gulp'),
 	autoprefixer = require('gulp-autoprefixer'),
 	del = 	require('del'),
 	jade = require('gulp-jade'),
+	imageop = require('gulp-image-optimization'),
 	browserSync = require('browser-sync'),
 	reload = browserSync.reload,
 	rename = require('gulp-rename');
@@ -58,6 +59,21 @@ gulp.task('html', function() {
 		.pipe(gulp.dest('app/'))
 		.pipe(reload({stream:true}));
 });
+
+// ///////////////////////
+// Image Optimization Tasks
+// ///////////////////////
+
+gulp.task('images', function(cb) {
+	gulp.src(['app/images/*.png', 'app/images/*.jpg', 'app/images/*.gif', 'app/images/*.jpeg'])
+		.pipe(imageop({
+			optimizationLevel: 5,
+			progressive: true,
+			interlaced: true
+		}))
+		.pipe(gulp.dest('app/img'));
+})
+
 
 // ///////////////////////
 // Browser-sync Tasks
