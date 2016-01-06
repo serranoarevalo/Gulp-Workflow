@@ -34,8 +34,9 @@ gulp.task('scripts', function() {
 gulp.task('sass', function() {
 	gulp.src('app/scss/**/*.scss')
 		.pipe(plumber())
-		.pipe(sass().on('error', sass.logError))
+		.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
 		.pipe(autoprefixer('last 2 versions'))
+		.pipe(rename({suffix:'.min'}))
 		.pipe(gulp.dest('app/css/'))
 		.pipe(reload({stream:true}));
 });
@@ -131,7 +132,8 @@ gulp.task('build:remove', ['build:copy'],  function(cb) {
 	del([
 		'build/scss/',
 		'build/js/!(*.min.js)',
-		'build/templates/'
+		'build/templates/',
+		'build/images/'
 	], cb);
 });
 
